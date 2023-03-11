@@ -1,20 +1,38 @@
 <?php
-	include('koneksi.php');
-	//nama db 		//nama di web
-	$id_satwa		=	$_POST['id_satwa'];
-	$gambar		=	$_POST['gambar'];
-	$nama		=	$_POST['nama'];
-	$biografi		=	$_POST['biografi'];
-	$jumlah		=	$_POST['jumlah'];
-	
-	$sql = mysqli_query($koneksi, "INSERT INTO tb_satwa(id_satwa, gambar, nama, biografi, jumlah) VALUES('$id_satwa', '$gambar', '$nama', '$biografi', '$jumlah')") or die(mysqli_error($koneksi)); //GANTI
-				
-				if($sql) //jika data berhasil ditambahkan, maka halaman yang akan terbuka adalah halaman namafile1
-				{
-					echo '<script>alert("Berhasil melakukan tambah data."); document.location="satwa.php";</script>'; //GANTI
-				}
-				else //jika tidak berhasi ditambahkan ke database, maka halaman yang akan terbuka adalah halaman namafile2
-				{
-					echo '<script>alert("Gagal melakukan proses tambah data"); document.location="satwa_tambah.php";</script>'; //GANTI
-				}
-?>
+include 'koneksi.php';
+$id_satwa = $_POST['id_satwa'];
+$nama   = $_POST['nama'];
+$biografi   = $_POST['biografi'];
+$jumlah   = $_POST['jumlah'];
+$gambar = $_FILES['gambar']['name'];
+if($gambar != "") {
+  $ekstensi_diperbolehkan = array('png','jpg');
+  $x = explode('.', $gambar);
+  $ekstensi = strtolower(end($x));
+  $file_tmp = $_FILES['gambar']['tmp_name'];   
+  $angka_acak     = rand(1,999);
+  $nama_gambar_baru = $angka_acak.'-'.$gambar;
+  if(in_array($ekstensi, $ekstensi_diperbolehkan) === true)  {
+    move_uploaded_file($file_tmp, 'img/'.$nama_gambar_baru);
+    $query  = "INSERT INTO tb_satwa SET nama = '$nama', biografi = '$biografi', jumlah = '$jumlah', gambar = '$nama_gambar_baru'";
+    $result = mysqli_query($koneksi, $query);
+    if(!$result){
+      die ("Query gagal dijalankan: ".mysqli_errno($koneksi).
+       " - ".mysqli_error($koneksi));
+    } else {
+      echo "<script>alert('Berhasil menambahkan data.');window.location='satwa.php';</script>";
+    }
+  } else {
+    echo "<script>alert('Ekstensi gambar yang boleh hanya jpg atau png.');window.location='satwa_tambah.php';</script>";
+  }
+} else {
+  $query  = "INSERT INTO tb_satwa SET nama = '$nama'";
+  $result = mysqli_query($koneksi, $query);
+      // periska query apakah ada error
+  if(!$result){
+    die ("Query gagal dijalankan: ".mysqli_errno($koneksi).
+     " - ".mysqli_error($koneksi));
+  } else {
+    echo "<script>alert('Berhasil menambahkan data.');window.location='satwa.php';</script>";
+  }
+}

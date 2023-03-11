@@ -113,10 +113,25 @@ $id_akun=$_SESSION["id_akun"];
 						</div>
                 </div>
             </div>
-			<button type="button" class="btn btn-outline-success"><a href="satwa_tambah.php" class="nav-item nav-link">+ Tambahkan Data</a></button>
-			 <form method="GET" action="satwa.php #example1" style="text-align: center;">
-				<label>Kata Pencarian : 
-				<input type="text" name="kata_cari" value="<?php if(isset($_GET['kata_cari'])) { echo $_GET['kata_cari']; } ?>"  /></label>
+			
+			 <form method="GET" action="satwa.php#example1" style="text-align: center;">
+				<label> Pilih Satwa :
+				<select name="kata_cari" value="<?php if(isset($_GET['kata_cari'])) { echo $_GET['kata_cari']; } ?>" class="form-control" id="name"  >
+				    <option></option>
+                    <?php 
+                    	require_once 'koneksi.php';
+                    	$query = "SELECT * FROM tb_satwa ORDER BY nama DESC";
+                    	$result = mysqli_query($koneksi, $query);
+                    				
+                    	while($data = mysqli_fetch_assoc($result) )
+                    	{
+                    	?>
+                    	<option value="<?php echo $data['nama']; ?>"><?php echo $data['nama']; ?></option>
+                    	<?php 
+                    	} 				
+                    ?>
+                    </select>
+                    </label>
 				<button type="submit" class="btn btn-dark">Cari</button>
 			</form>
 			<br>
@@ -156,11 +171,11 @@ $id_akun=$_SESSION["id_akun"];
 				<td align="justify"><?php echo $row['biografi']; ?></td>
 				<td align="justify"><?php echo $row['jumlah']; ?></td>
 				<td><?php echo '
-				  <a href="satwa_edit.php?id_satwa='.$row['id_satwa'].'" class="nav-item nav-link""><button type="button" class="btn btn-primary">Edit</button></a> 
+				  <a href="satwa_edit.php?id_satwa='.$row['id_satwa'].'" class="nav-item nav-link""><button class="btn btn-primary"><img src="img/edit.png"/></button></a> 
 				';?>
 				</td>
 				<td><?php echo '
-				  <a href="satwa_delete.php?id_satwa='.$row['id_satwa'].'" class="nav-item nav-link" onclick="return confirm(\'Yakin ingin menghapus data ini?\')"><button type="button" class="btn btn-danger">Hapus</button></a>
+				  <a href="satwa_delete.php?id_satwa='.$row['id_satwa'].'" class="nav-item nav-link" onclick="return confirm(\'Yakin ingin menghapus data ini?\')"><button class="btn btn-danger"><img src="img/hapus.png"/></button></a>
 				  ';?>
 				</td>
 			</tr>
@@ -169,6 +184,9 @@ $id_akun=$_SESSION["id_akun"];
 			?>
 		</tbody>
 		</table>
+		<center>
+		<button type="button" class="btn btn-outline-success"><a href="satwa_tambah.php" class="nav-item nav-link">+ Tambahkan Data</a></button>
+		</center>
 		</div>
         </div>
 		

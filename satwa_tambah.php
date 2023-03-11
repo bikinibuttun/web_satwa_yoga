@@ -41,7 +41,7 @@
                             <h1 class="position-relative d-inline text-primary ps-4">Tambah Data</h1>
                         </div>
                         <div class="wow fadeInUp" data-wow-delay="0.3s">
-                            <form method="POST" action="satwa_simpan.php">
+                            <form method="POST" action="satwa_simpan.php" enctype="multipart/form-data">
                                 <div class="row g-3">
 								 <div class="col-12">
                                         <div class="form-floating">

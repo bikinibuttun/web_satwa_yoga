@@ -1,8 +1,20 @@
-<?php
-	include('koneksi.php'); 
-    $id_satwa = $_GET['id_satwa'];
-    $select = mysqli_query($koneksi, "SELECT * FROM tb_satwa WHERE id_satwa='$id_satwa'") or die(mysqli_error($koneksi));
-    $data = mysqli_fetch_assoc($select);
+<?php 
+include 'koneksi.php';
+
+if (isset($_GET['id_satwa'])) {
+  $id_satwa = ($_GET['id_satwa']);
+  $query = "SELECT * FROM tb_satwa WHERE id_satwa='$id_satwa'";
+  $result = mysqli_query($koneksi, $query);
+  if (!$result) {
+    die('Query Error: '.mysqli_errno($koneksi). " - ".mysqli_error($koneksi));
+  }
+  $data = mysqli_fetch_assoc($result);
+  if (!count($data)) {
+    echo "<script>alert('Data tidak ditemukan di database');window.location='satwa.php';</script>";
+  }
+} else {
+  echo "<script>alert('Masukan Data');window.location='satwa.php';</script>";
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,7 +59,7 @@
                             <h1 class="position-relative d-inline text-primary ps-4">Edit Data</h1>
                         </div>
                         <div class="wow fadeInUp" data-wow-delay="0.3s">
-                            <form method="POST" action="satwa_update.php">
+                            <form method="POST" action="satwa_update.php" enctype="multipart/form-data">
                                 <div class="row g-3">
 								 <div class="col-12">
                                         <div class="form-floating">
@@ -58,7 +70,7 @@
                                     <div class="col-12">
                                         <div class="form-floating">
 											</input><img src="img/<?php echo $data['gambar']?>" width="150px">
-                                            <input type="file" class="form-control" name="gambar" id="subject" required value="<?php echo $data['gambar']?>"><? echo $data['gambar']?></input>
+                                            <input type="file" class="form-control" name="gambar" id="subject" value="<?php echo $data['gambar']?>"><? echo $data['gambar']?></input>
                                             <label for="subject">GAMBAR</label>
                                         </div>
                                     </div>

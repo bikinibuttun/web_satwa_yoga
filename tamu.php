@@ -55,6 +55,7 @@
                         <a href="tamu.php" class="nav-item nav-link active">Dashboard</a>
                         <a href="saran.php" class="nav-item nav-link">Saran</a>
                         <a href="login.php" class="nav-item nav-link">Login</a>
+                        <a href="cetak.php" class="nav-item nav-link"><button type="button" class="btn btn-outline-secondary">Print</button></a>
                     </div>
                 </div>
             </nav>
@@ -106,9 +107,23 @@
 					</div>
                 </div>
             </div>
-			<form method="GET" action="tamu.php #example1" style="text-align: center;">
-				<label>Kata Pencarian : 
-				<input type="text" name="kata_cari" value="<?php if(isset($_GET['kata_cari'])) { echo $_GET['kata_cari']; } ?>"  /></label>
+			<form method="GET" action="tamu.php#example1" style="text-align: center;">
+			    <label> Pilih Satwa : <select name="kata_cari" value="<?php if(isset($_GET['kata_cari'])) { echo $_GET['kata_cari']; } ?>" class="form-control" id="name">
+				    <option></option>
+                    <?php 
+                    	require_once 'koneksi.php';
+                    	$query = "SELECT * FROM tb_satwa ORDER BY nama DESC";
+                    	$result = mysqli_query($koneksi, $query);
+                    				
+                    	while($data = mysqli_fetch_assoc($result) )
+                    	{
+                    	?>
+                    	<option value="<?php echo $data['nama']; ?>"><?php echo $data['nama']; ?></option>
+                    	<?php 
+                    	} 				
+                    ?>
+                    </select>
+                    </label>
 				<button type="submit" class="btn btn-dark">Cari</button>
 			</form>
 			<br>
